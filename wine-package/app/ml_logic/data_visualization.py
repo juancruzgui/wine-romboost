@@ -274,7 +274,7 @@ def cluster_comparison_bar(X_comparison:pd.DataFrame, colors, title="Cluster res
     fig.supylabel('Deviation from overall mean in %')
     plt.tight_layout()
     plt.subplots_adjust(top=0.90)
-    plt.savefig(f'images/wine_cluster_mean_deviation.png')
+    plt.savefig(f'images/wine_cluster_mean_deviations.png')
 
 
 def cluster_characteristics(X_dev_rel, title="\nCluster characteristics\n"):
@@ -337,3 +337,25 @@ class Radar(object):
         self.ax.plot(angle, values, *args, **kw)
         kw['label'] = '_noLabel'
         self.ax.fill(angle, values,*args,**kw)
+
+def radar_plot(km, X_std_mean):
+    """
+    Plot radar chart for wine attributes and clusters.
+
+    Parameters:
+    - km(Kmeans()): Kmeans object
+    - X_std_mean(pd.DataFrame)
+    """
+    fig = plt.figure(figsize=(8, 8))
+    no_features = len(km.feature_names_in_)
+    radar = Radar(fig, km.feature_names_in_, labels = np.unique(km.feature_names_in_))
+
+    for k in range(0,km.n_clusters):
+        cluster_data = X_std_mean[k].values.tolist()
+        radar.plot(cluster_data,  '-', lw=2, color=cluster_colors[k], alpha=0.7, label='cluster {}'.format(k))
+
+    radar.ax.legend(fancybox=True,
+                bbox_to_anchor=(1.03, 1.05)
+                )
+    radar.ax.set_title("\nCluster characteristics: \nFeature means per cluster\n", size=22, pad=60)
+    plt.savefig(f'images/wine_cluster_radar.png')

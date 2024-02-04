@@ -5,6 +5,7 @@ from sklearn.preprocessing import StandardScaler
 import ml_logic.clustering as clus
 import ml_logic.data_preprocessing as prep
 import ml_logic.data_visualization as viz
+from ml_logic.data_visualization import cluster_colors, Radar
 import ml_logic.PCA as pca
 from sklearn.decomposition import PCA
 import numpy as np
@@ -37,14 +38,14 @@ else:
 
 
 #DF
-print("Dataframe:\n")
+print("🍇 Dataframe:\n")
 print(df.head())
-print("Wine Attributes:\n")
+print("\n")
+print("🍷 Wine Attributes:\n")
 print(df.info())
+print("\n")
 
 print(line)
-
-
 
 #Outliers
 df_cleaned = prep.remove_outliers_iqr(df)
@@ -57,9 +58,10 @@ print(line)
 
 
 #Statistics
-print("🧪 Statistics\n")
+print("\n🧪 Statistics\n")
 print(df_cleaned.describe())
 viz.plot_distplots(df_cleaned)
+print("\n")
 print(line)
 
 
@@ -69,15 +71,15 @@ correlation_matrix = viz.plot_correlations(df_cleaned)
 
 print(f"\n🖊️ Printing correlations\n")
 
-print(f"\n- Corr [0.4,0.6)\n")
+print(f"\n- Correlations [0.4,0.6)")
 medium_correlation = viz.plot_correlated_scatters(df_cleaned,0.4,0.6)
 print(medium_correlation)
 
-print(f"\n- Corr [0.6,0.8)\n")
+print(f"\n- Correlations [0.6,0.8)")
 strong_correlation = viz.plot_correlated_scatters(df_cleaned,0.6,0.8)
 print(strong_correlation)
 
-print(f"\n- Corr [0.8,1)\n")
+print(f"\n- Correlations [0.8,1)")
 very_strong_correlation = viz.plot_correlated_scatters(df_cleaned,0.8,1)
 print(very_strong_correlation)
 
@@ -88,6 +90,7 @@ print(line)
 
 
 #Clustering
+print("\n📉 Clustering without PCA")
 X = df_cleaned.copy()
 X = pd.DataFrame(StandardScaler().fit_transform(X), columns = X.columns)
 
@@ -96,12 +99,12 @@ ktests = clus.k_test(X, [2,3,4,5,6])
 scores = []
 ks = []
 for key,value in ktests['k'].items():
-    print(f'- {key} clusters WCSS={value["wcss"]} Silhouette Score={value["silo"]}')
+    print(f'- {key} clusters WCSS={round(value["wcss"],2)} Silhouette Score={round(value["silo"],2)}')
     scores.append(value['silo'])
     ks.append(key)
 
 k = ks[scores.index(max(scores))]
-print(f'\n⚡ Number of clusters elected: {k}\n')
+print(f'\n⚡ Number of clusters elected: {k}\n - Silhouette Score: {round(max(scores),2)}')
 
 # -----Perform Kmeans clustering with k=3
 km, km_fit, cluster_assigns = clus.k_means(X,k=3)
@@ -112,13 +115,14 @@ print(line)
 
 
 #PCA
-print("\n📉 PCA Algorithm")
+print("\n📉 Clustering with PCA")
 X=df_cleaned.copy()
 X_transformed=StandardScaler().fit_transform(X)
 
 cum_variance = pca.plot_pca_n_decision(X_transformed)
 print("\nCumulative explained variance:")
-print(cum_variance)
+for i,var in enumerate(cum_variance):
+    print(f'- {i+1} PCA components - explained variance = {round(var,2)}')
 
 pca = PCA(n_components=3).fit(X_transformed)
 X_pca = pd.DataFrame(pca.transform(X_transformed), columns = [f'PC{i}' for i in range(3)])
@@ -128,12 +132,12 @@ ktests = clus.k_test(X_pca, [2,3,4,5,6])
 scores = []
 ks = []
 for key,value in ktests['k'].items():
-    print(f'- {key} clusters WCSS={value["wcss"]} Silhouette Score={value["silo"]}')
+    print(f'- {key} clusters WCSS={round(value["wcss"],2)} Silhouette Score={round(value["silo"],2)}')
     scores.append(value['silo'])
     ks.append(key)
 
 k = ks[scores.index(max(scores))]
-print(f'\n⚡ Number of clusters elected: {k}\n')
+print(f'\n⚡ Number of clusters elected: {k}\n - Silhouette Score: {round(max(scores),2)}')
 
 # -----Perform Kmeans clustering with k=3
 km_pca,km_fit_pca, cluster_assignments = clus.k_means(X_pca)
@@ -153,7 +157,7 @@ df_cleaned['cluster'] = cluster_assignments
 print('\n🪶 Printing pairplot\n')
 viz.pairplot(df_cleaned, '\nWine Features pairplot\n\n')
 
-print('\nAnalyzing mean:\n')
+print('\n🔎 Analyzing mean deviation from overall mean for each feature:\n')
 #Mean analysis
 X['cluster'] = cluster_assignments
 X_std = pd.DataFrame(X_transformed, columns = X.drop(columns=['cluster']).columns)
@@ -174,3 +178,14 @@ X_std_dev_rel.drop(columns=['mean'], inplace=True)
 X_std_mean.drop(columns=['mean'], inplace=True)
 print(X_dev_rel)
 print('\n')
+
+print('\n🪶 Printing mean comparisson for features')
+viz.cluster_comparison_bar(X_dev_rel, cluster_colors, title="\nComparison of the mean per cluster to overall mean in percent\n")
+
+print('\n🪶 Printing cluster characteristics')
+viz.cluster_characteristics(X_dev_rel, title="\nCluster characteristics\n")
+
+print('\n🪶 Printing radar plot')
+viz.radar_plot(km,X_std_mean)
+
+print('\n✅ Wine Analysis done - Check images http://127.0.0.1:8000/analysis-images')
