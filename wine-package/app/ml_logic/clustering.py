@@ -4,7 +4,9 @@ from sklearn.cluster import KMeans
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-
+import sys
+import os
+script_path = os.path.abspath(__file__)
 
 def k_test(X, k_tests:list):
     """
@@ -61,7 +63,8 @@ def k_test(X, k_tests:list):
     plt.ylabel('Silhouette Score)', fontsize=10)
 
     plt.tight_layout()
-    plt.savefig(f'images/wine_cluster_tests-k={k_tests}.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_cluster_tests-k.png')
+    plt.savefig(path)
 
     return tests_dict
 

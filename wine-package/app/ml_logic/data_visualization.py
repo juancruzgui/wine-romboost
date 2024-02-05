@@ -6,6 +6,10 @@ from matplotlib.colors import ListedColormap
 import pandas as pd
 import numpy as np
 import matplotlib.patches as mpatches
+import sys
+import os
+script_path = os.path.abspath(__file__)
+
 cluster_colors = ['#ffc7ff', '#6c35de', '#4d425f', '#cd7e59', '#ddb247', '#d15252']
 cluster_map = {key:value for key,value in enumerate(cluster_colors)}
 cluster_mapping = ListedColormap(cluster_colors)
@@ -34,7 +38,8 @@ def plot_boxplots(df):
         sns.boxplot(x=df[col],color='#6c35de')
         plt.xlabel(col, fontsize=10)
     plt.tight_layout()
-    plt.savefig('images/wine_boxplots.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_boxplots.png')
+    plt.savefig(path)
     #plt.show()
 
 def plot_distplots(df):
@@ -64,7 +69,9 @@ def plot_distplots(df):
             axes[index].set_xlabel(f'{col}')
 
     plt.tight_layout()
-    plt.savefig('images/wine_distplots.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_distplots.png')
+    plt.savefig(path)
+
 
 
 def plot_correlations(df_cleaned):
@@ -84,7 +91,8 @@ def plot_correlations(df_cleaned):
 
     # Customize the plot
     plt.title('\nCorrelation Heatmap', fontsize=20, pad=20)
-    plt.savefig('images/wine_correlations.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_correlations.png')
+    plt.savefig(path)
 
     return correlation_matrix
 
@@ -143,7 +151,8 @@ def plot_correlated_scatters(df,lower_bound, upper_bound):
             spine.set_visible(False)
 
     plt.tight_layout()
-    plt.savefig(f'images/wine_correlated_scatters({lower_bound},{upper_bound}).png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_correlated_scatters({lower_bound},{upper_bound}).png')
+    plt.savefig(path)
     return cleaned_matrix
 
 def plot_clusters(X:pd.DataFrame,km,title=None,random_state=42,subplot=False,nrows=1,ncols=1,index=1):
@@ -175,7 +184,8 @@ def plot_clusters(X:pd.DataFrame,km,title=None,random_state=42,subplot=False,nro
     plt.title(f"KMeans Clustering (k={k})", fontsize=12)
     sns.scatterplot(data=X, x=X.columns[0],y=X.columns[1],hue=cluster_assignments,s=25, edgecolor=None, palette=cluster_map)
     plt.tight_layout()
-    plt.savefig(f'images/wine_clusters_plot-k{k}.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_clusters_plot-k{k}.png')
+    plt.savefig(path)
 
 
 def biplot(score:pd.DataFrame, cluster_labels, coeff, labels=None):
@@ -189,7 +199,7 @@ def biplot(score:pd.DataFrame, cluster_labels, coeff, labels=None):
 
     """
     plt.figure(figsize=(8, 8))
-    plt.title("PCA Biplot")
+    plt.title("\nPCA Biplot\n")
     xs = score.loc[:, score.columns[0]]
     ys = score.loc[:, score.columns[1]]
     n = coeff.shape[0]
@@ -209,7 +219,8 @@ def biplot(score:pd.DataFrame, cluster_labels, coeff, labels=None):
     plt.xlabel("PC1")
     plt.ylabel("PC2")
     plt.grid()
-    plt.savefig(f'images/PCA_biplot.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'PCA_biplot.png')
+    plt.savefig(path)
 
 
 def pairplot(df:pd.DataFrame,title=None):
@@ -224,7 +235,9 @@ def pairplot(df:pd.DataFrame,title=None):
     sns.pairplot(df, hue='cluster', palette=cluster_map)
     plt.suptitle(title, fontsize=18)
     plt.tight_layout()
-    plt.savefig(f'images/wine_pairplot.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_pairplot.png')
+    plt.savefig(path)
+
 
 def cluster_comparison_bar(X_comparison:pd.DataFrame, colors, title="Cluster results"):
     """
@@ -274,7 +287,8 @@ def cluster_comparison_bar(X_comparison:pd.DataFrame, colors, title="Cluster res
     fig.supylabel('Deviation from overall mean in %')
     plt.tight_layout()
     plt.subplots_adjust(top=0.90)
-    plt.savefig(f'images/wine_cluster_mean_deviations.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_cluster_mean_deviations.png')
+    plt.savefig(path)
 
 
 def cluster_characteristics(X_dev_rel, title="\nCluster characteristics\n"):
@@ -303,7 +317,8 @@ def cluster_characteristics(X_dev_rel, title="\nCluster characteristics\n"):
     plt.legend(bbox_to_anchor=(1.04,1))
     fig.autofmt_xdate(rotation=0)
     plt.tight_layout()
-    plt.savefig(f'images/wine_cluster_characteristics.png')
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_cluster_characteristics.png')
+    plt.savefig(path)
 
 
 class Radar(object):
@@ -346,7 +361,7 @@ def radar_plot(km, X_std_mean):
     - km(Kmeans()): Kmeans object
     - X_std_mean(pd.DataFrame)
     """
-    fig = plt.figure(figsize=(8, 8))
+    fig = plt.figure(figsize=(8, 10))
     no_features = len(km.feature_names_in_)
     radar = Radar(fig, km.feature_names_in_, labels = np.unique(km.feature_names_in_))
 
@@ -355,7 +370,9 @@ def radar_plot(km, X_std_mean):
         radar.plot(cluster_data,  '-', lw=2, color=cluster_colors[k], alpha=0.7, label='cluster {}'.format(k))
 
     radar.ax.legend(fancybox=True,
-                bbox_to_anchor=(1.03, 1.05)
+                bbox_to_anchor=(1.04, 0.99)
                 )
-    radar.ax.set_title("\nCluster characteristics: \nFeature means per cluster\n", size=22, pad=60)
-    plt.savefig(f'images/wine_cluster_radar.png')
+    radar.ax.set_title("\nCluster characteristics:\n", size=18, pad=60)
+    fig.subplots_adjust(left=0.2, right=0.8, top=0.9, bottom=0.1)
+    path = os.path.join(os.path.dirname(script_path),'..','images',f'wine_cluster_radar.png')
+    plt.savefig(path)
