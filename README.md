@@ -1,6 +1,8 @@
 # wine-romboost
 ### Introduction
 Unsupervised learning on wine dataset. Detecting clusters of wines and describing them.
+##Analysis
+Analysis is located in two jupyter notebooks on the folder wine-package/notebooks
 
  ---
  
