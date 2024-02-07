@@ -15,7 +15,7 @@ From the command line and located where the DockerFile is you will need to run t
 
 **docker build -t <image_name> .**
 
-**docker run -d -p 8000:8000 <image_name>
+**docker run -d -p 8000:8000 <image_name>**
 
 ### Once the image is built:
 - Once the image is built the image is going to run the API on https://localhost:8000
