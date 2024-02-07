@@ -12,7 +12,7 @@ import numpy as np
 
 
 #API REQUEST
-api_url = 'http://127.0.0.1:8000/wine-raw'
+api_url = 'http://localhost:8000/wine-raw'
 
 line = "-"*110
 
@@ -188,4 +188,4 @@ viz.cluster_characteristics(X_dev_rel, title="\nCluster characteristics\n")
 print('\n🪶 Printing radar plot')
 viz.radar_plot(km,X_std_mean)
 
-print('\n✅ Wine Analysis done - Check images http://127.0.0.1:8000/analysis-images')
+print('\n✅ Wine Analysis done - Check images http://localhost:8000/analysis-images')
