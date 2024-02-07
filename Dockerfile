@@ -43,4 +43,4 @@ RUN pip install -r requirements.txt
 RUN pip install .
 
 
-CMD uvicorn wine-package.app.api:app --host 127.0.0.1 --port 8000 && python wine-package/app/main.py
+CMD uvicorn wine-package.app.api:app --host 0.0.0.0 --port 8000 && python wine-package/app/main.py
