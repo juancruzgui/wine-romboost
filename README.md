@@ -28,12 +28,12 @@ From the command line and located where the DockerFile is you will need to run t
 FastAPI to download the raw dataset from GCP and images from analysis.
 
 ### endpoints:
-- [127.0.0.1:8000](http://127.0.0.1:8000/) (method:GET) -> "Hello World"
-- [127.0.0.1:](http://127.0.0.1:8000/wine-raw.csv)http://127.0.0.1:8000/wine-raw.csv (method:GET) -> Download wine_raw csv file
-- [http://127.0.0.1:8000/analysis-images](http://127.0.0.1:8000/analysis-images) (method:GET) -> Returns a json dict with all images names and urls from the analysis performed.
+- [0.0.0.0:8000](http://0.0.0.0:8000/) (method:GET) -> "Hello World"
+- [0.0.0.0:](http://0.0.0.0:8000/wine-raw.csv)http://127.0.0.1:8000/wine-raw.csv (method:GET) -> Download wine_raw csv file
+- [http://0.0.0.0:8000/analysis-images](http://0.0.0.0:8000/analysis-images) (method:GET) -> Returns a json dict with all images names and urls from the analysis performed.
 ![image](https://github.com/juancruzgui/wine-romboost/assets/71938321/f8ca353b-9b5a-4f7e-812a-3b5e46306de0)
 
-- http://127.0.0.1:8000/images?name= <name:str> (method:GET) ->Returns the image corresponding to name - you can check image names on the endpoint above.
+- http://0.0.0.0:8000/images?name= <name:str> (method:GET) ->Returns the image corresponding to name - you can check image names on the endpoint above.
 ![image](https://github.com/juancruzgui/wine-romboost/assets/71938321/9335c179-c937-41bb-8eb1-223598da86f6)
 
 
