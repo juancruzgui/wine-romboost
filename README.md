@@ -8,10 +8,8 @@ Analysis is located in two jupyter notebooks on the folder wine-package/notebook
  
 ## Docker Setup
 ### Dockerfile
-Prior building the image we need to work on three lines in the docker file:
+Prior building the image we need to work on one line in the docker file:
 - WORKDIR </root/code/juancruzgui/Projects/wine-analysis-romboost->your_path>: You will need to change this path to the path of the parent directory to the wine-package folder.
-- ENV GOOGLE_APPLICATION_CREDENTIALS=wine-package/Credentials/google_credentials.json: This line does not have to be changed, but you will need to be sure that you have you google json key on that path for authenticating on GCP.
-- RUN gcloud config set project <simple-sales-412318->your_project_id>: You will need to put here your GCP project id.
 ### Docker build
 From the command line and located where the DockerFile is you will need to run the following line to build the image:
 
