@@ -12,7 +12,7 @@ import numpy as np
 
 
 #API REQUEST
-api_url = 'http://127.0.0.1:8000/wine-raw'
+api_url = 'http://0.0.0.0:8000/wine-raw'
 
 line = "-"*110
 
@@ -30,7 +30,7 @@ if response.status_code == 200:
     df = pd.read_csv(file_data)
 
     # Now 'df' contains the file content as a DataFrame, and you can use it as needed
-    print(f"\n✅ Wine DataFrame retrieved successfully from {api_url}")
+    print(f"\n✅ Wine DataFrame retrieved successfully from {'http://localhost:8000/wine-raw'}")
     print(f"\n📐 Wine DataFrame shape {df.shape}\n")
 else:
     # Print an error message if the request was not successful
@@ -188,4 +188,4 @@ viz.cluster_characteristics(X_dev_rel, title="\nCluster characteristics\n")
 print('\n🪶 Printing radar plot')
 viz.radar_plot(km,X_std_mean)
 
-print('\n✅ Wine Analysis done - Check images http://127.0.0.1:8000/analysis-images')
+print('\n✅ Wine Analysis done - Check images http://localhost:8000/analysis-images')

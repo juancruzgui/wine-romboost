@@ -43,7 +43,7 @@ def get_images_labels():
     files = os.listdir(os.path.join(os.path.dirname(script_path),'.','images'))
     files_dict = {f'file{i}':
         {'name':file.split('/')[-1],
-         'url':f'http://0.0.0.0:8000/images?name={file.split("/")[-1]}'}
+         'url':f'http://127.0.0.1:8000/images?name={file.split("/")[-1]}'}
                   for i,file in enumerate(files)}
     return files_dict
 
@@ -55,4 +55,4 @@ def get_images_labels(name:str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
