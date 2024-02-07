@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from .ml_logic.data_extraction import download_wine_file
 from fastapi.responses import FileResponse
 import os
-import sys
+import requests
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -24,9 +24,18 @@ def root():
 #http://127.0.0.1:8000/wine-raw
 @app.get("/wine-raw")
 def download_wine():
-    download_wine_file('the_public_bucket','wine-clustering.csv',os.path.join(os.path.dirname(script_path),'..','data','wine_raw.csv'))
-    return FileResponse(os.path.join(os.path.dirname(script_path),'..','data','wine_raw.csv'))
-
+    #download_wine_file('the_public_bucket','wine-clustering.csv',os.path.join(os.path.dirname(script_path),'..','data','wine_raw.csv'))
+    #return FileResponse(os.path.join(os.path.dirname(script_path),'..','data','wine_raw.csv'))
+    url = "https://storage.googleapis.com/the_public_bucket/wine-clustering.csv"
+    response = requests.get(url)
+    file_path = os.path.join(os.path.dirname(script_path),'..','data','wine_raw.csv')
+    if response.status_code == 200:
+        with open(file_path, 'wb') as file:
+            file.write(response.content)
+        print(f"File saved successfully at {file_path}")
+    else:
+        print(f"Failed to fetch content from {url}. Status code: {response.status_code}")
+    return FileResponse(file_path)
 
 #http://127.0.0.1:8000/analysis-images
 @app.get("/analysis-images")
