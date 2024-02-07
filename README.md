@@ -15,15 +15,16 @@ From the command line and located where the DockerFile is you will need to run t
 
 **docker build -t <image_name> .**
 
-**docker run -d -p 8000:8000 <image_name>**
+
 
 ### Once the image is built:
-- Once the image is built the image is going to run the API on https://localhost:8000
-- To excecute the script that will perform the analysis you can use the terminal on docker desktop once the image is running and excecute:
+**docker run -d -p 8000:8000 <image_name>** -> run the image and map the api to the localhost
 
-**python wine-package/app/main.py**
+**docker ps** -> Check the container id for the image just created
 
-![image](https://github.com/juancruzgui/wine-romboost/assets/71938321/a61d6f0e-0230-4f47-bc71-696be9888096)
+**docker exec <container_id> python wine-package/app/main.py**
+
+![image](https://github.com/juancruzgui/wine-romboost/assets/71938321/c7cf1fe4-a989-413b-b39f-0702c7eba443)
 
 ---
 ## API DOC
