@@ -2,7 +2,8 @@
 ### Introduction
 Unsupervised learning on wine dataset. Detecting clusters of wines and describing them.
 ## Analysis
-Analysis is located in two jupyter notebooks on the folder wine-package/notebooks
+Analysis is located in two jupyter notebooks on the folder wine-package/notebooks.
+Wine-analysis is meant for raw analysis, and wine-presentation for presentation purposes.
 
  ---
  
