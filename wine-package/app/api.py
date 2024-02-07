@@ -16,12 +16,12 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-#http://127.0.0.1:8000/
+#http://0.0.0.0:8000/
 @app.get("/")
 def root():
     return {"Hello":"World"}
 
-#http://127.0.0.1:8000/wine-raw
+#http://0.0.0.0:8000/wine-raw
 @app.get("/wine-raw")
 def download_wine():
     #download_wine_file('the_public_bucket','wine-clustering.csv',os.path.join(os.path.dirname(script_path),'..','data','wine_raw.csv'))
@@ -37,18 +37,22 @@ def download_wine():
         print(f"Failed to fetch content from {url}. Status code: {response.status_code}")
     return FileResponse(file_path)
 
-#http://127.0.0.1:8000/analysis-images
+#http://0.0.0.0:8000//analysis-images
 @app.get("/analysis-images")
 def get_images_labels():
     files = os.listdir(os.path.join(os.path.dirname(script_path),'.','images'))
     files_dict = {f'file{i}':
         {'name':file.split('/')[-1],
-         'url':f'http://127.0.0.1:8000/images?name={file.split("/")[-1]}'}
+         'url':f'http://0.0.0.0:8000/images?name={file.split("/")[-1]}'}
                   for i,file in enumerate(files)}
     return files_dict
 
-#http://127.0.0.1:8000/images&name=''
+#http://0.0.0.0:8000//images&name=''
 @app.get("/images")
 def get_images_labels(name:str):
     file = os.path.join(os.path.dirname(script_path),'.','images',f'{name}')
     return FileResponse(file)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
